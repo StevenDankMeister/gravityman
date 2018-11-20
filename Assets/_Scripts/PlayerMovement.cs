@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : GravityChanger {
 
     public float speed;
 
@@ -10,29 +10,39 @@ public class PlayerMovement : MonoBehaviour {
     SpriteRenderer spr;
 
     private bool flipped = false;
+    private bool invulnerability = false;
+
+    private float moveHorizontal;
+    [SerializeField]
+    private float maxHealth;
+
+    private float health;
 
 	// Use this for initialization
-	void Start () {
+	private void Start () {
         rb = GetComponent<Rigidbody2D>();
+        health = maxHealth;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 0.0f);
-            rb.gravityScale = rb.gravityScale * -1;
-            flipSprite();
-        }
+	private void Update ()
+    {       
+        Flip();
+        HorizontalMovement();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
+    {
+
+    }
+
+    private void HorizontalMovement()
     {
         if (Input.GetButton("Horizontal"))
         {
-            float moveHorizontal = Input.GetAxis("Horizontal");
+            moveHorizontal = Input.GetAxis("Horizontal");
 
-            rb.velocity = new Vector3(moveHorizontal*speed, rb.velocity.y, 0.0f);
+            rb.velocity = new Vector3(moveHorizontal * speed, rb.velocity.y, 0.0f);
         }
 
         if (Input.GetButtonUp("Horizontal"))
@@ -41,17 +51,37 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
-    void flipSprite()
+    private void Flip()
     {
-        if (flipped)
+        if (Input.GetButtonDown("Fire1"))
+            FlipGravity();
+    }    
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Damager" && !invulnerability)
         {
-            this.gameObject.GetComponent<SpriteRenderer>().flipY = false;
-            flipped = false;
+            invulnerability = true;
+            health -= 1;
+            print("health deducted");
+            StartCoroutine(WaitInvulnerability(1.5f));
         }
-        else
+
+        Dead();
+    }
+
+    private void Dead()
+    {
+        if (health == 0)
         {
-            this.gameObject.GetComponent<SpriteRenderer>().flipY = true;
-            flipped = true;
+            print("dead");
         }
+    }
+
+    public IEnumerator WaitInvulnerability(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        invulnerability = false;
+        print("invuln gone");
     }
 }
