@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour {
             invulnerability = true;
             health -= 1;
             healthText.text = "Health: " + health;
-            StartCoroutine(WaitInvulnerability(1.5f));
+            StartCoroutine(WaitInvulnerability(0.75f));
         }
 
         Dead();
