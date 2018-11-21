@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class PlayerMovement : GravityChanger {
+public class PlayerMovement : MonoBehaviour {
 
     public float speed;
+
+    [SerializeField]
+    private Text healthText;
 
     Rigidbody2D rb;
     SpriteRenderer spr;
 
-    private bool flipped = false;
     private bool invulnerability = false;
 
     private float moveHorizontal;
@@ -22,12 +26,12 @@ public class PlayerMovement : GravityChanger {
 	private void Start () {
         rb = GetComponent<Rigidbody2D>();
         health = maxHealth;
+        healthText.text = "Health: " + health;
 	}
 	
 	// Update is called once per frame
 	private void Update ()
     {       
-        Flip();
         HorizontalMovement();
     }
 
@@ -51,19 +55,13 @@ public class PlayerMovement : GravityChanger {
         }
     }
 
-    private void Flip()
-    {
-        if (Input.GetButtonDown("Fire1"))
-            FlipGravity();
-    }    
-
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Damager" && !invulnerability)
         {
             invulnerability = true;
             health -= 1;
-            print("health deducted");
+            healthText.text = "Health: " + health;
             StartCoroutine(WaitInvulnerability(1.5f));
         }
 
@@ -74,7 +72,7 @@ public class PlayerMovement : GravityChanger {
     {
         if (health == 0)
         {
-            print("dead");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -82,6 +80,5 @@ public class PlayerMovement : GravityChanger {
     {
         yield return new WaitForSeconds(seconds);
         invulnerability = false;
-        print("invuln gone");
     }
 }

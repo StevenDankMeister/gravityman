@@ -2,21 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GravityChanger : MonoBehaviour {
+public class GravityChanger : MonoBehaviour {
 
-	public void FlipGravity()
+    Rigidbody2D rb;
+    SpriteRenderer spr;
+
+    private void Start()
     {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        spr = GetComponent<SpriteRenderer>();
+    }
 
-        rb.gravityScale *= -1;
-        if (sr.flipY)
+    private void Update()
+    {
+        if (Input.GetButtonDown("Fire1"))
         {
-            sr.flipY = false;
-        }
-        else
-        {
-            sr.flipY = true;
+            rb.gravityScale *= -1;
+            if (spr.flipY)
+            {
+                spr.flipY = false;
+            }
+            else
+            {
+                spr.flipY = true;
+            }
         }
     }
 }
