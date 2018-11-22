@@ -25,14 +25,28 @@ public class PlayerMovement : MonoBehaviour {
 	// Use this for initialization
 	private void Start () {
         rb = GetComponent<Rigidbody2D>();
+        spr = GetComponent<SpriteRenderer>();
         health = maxHealth;
         healthText.text = "Health: " + health;
 	}
 	
 	// Update is called once per frame
 	private void Update ()
-    {       
+    {
         HorizontalMovement();
+        FlipSprite();
+    }
+
+    private void FlipSprite()
+    {
+        if (moveHorizontal >= 0)
+        {
+            spr.flipX = false;
+        }
+        else if (moveHorizontal < 0)
+        {
+            spr.flipX = true;
+        }
     }
 
     private void FixedUpdate()

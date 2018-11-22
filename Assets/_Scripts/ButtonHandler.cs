@@ -25,13 +25,13 @@ public class ButtonHandler : MonoBehaviour {
 		
 	}
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         spr.sprite = onSprite;
         door.SetActive(true);
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         spr.sprite = offSprite;
         door.SetActive(false);

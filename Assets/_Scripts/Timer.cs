@@ -15,7 +15,7 @@ public class Timer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        timerText.text = "Time: " + time;
+        timerText.text = time.ToString();
         time = Mathf.FloorToInt(Time.time);
 	}
 }
