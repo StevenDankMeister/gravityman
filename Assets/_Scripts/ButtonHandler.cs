@@ -10,14 +10,12 @@ public class ButtonHandler : MonoBehaviour {
     private Sprite offSprite;
 
     private SpriteRenderer spr;
-    private BoxCollider2D bCol2D;
 
     [SerializeField]
     private GameObject door;
 
 	void Start () {
         spr = GetComponent<SpriteRenderer>();
-        bCol2D = GetComponent<BoxCollider2D>();
         offSprite = spr.sprite;
 	}
 
